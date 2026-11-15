@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "App-Statistiken",
-        "description": "Nur-Lese-Schlüssel. Apple, Google oder beides ausfüllen. Der Apple-Schlüssel braucht nur die Rolle „Sales“, das Google-Dienstkonto nur „App-Informationen ansehen und Bulk-Berichte herunterladen“.",
+        "description": "Nur-Lese-Schlüssel für Apple, Google oder beide eingeben (der andere Store kann später über „Neu konfigurieren“ ergänzt werden).\n\n- **Apple:** ein App-Store-Connect-API-Schlüssel nur mit der Rolle **Sales**.\n- **Google:** ein Dienstkonto nur mit **App-Informationen ansehen und Bulk-Berichte herunterladen**.\n\nSchritt-für-Schritt-Anleitung: [https://github.com/dosje/app-stats#setup](https://github.com/dosje/app-stats#setup)",
         "data": {
           "apple_issuer_id": "Apple Issuer ID",
           "apple_key_id": "Apple Key ID",
@@ -11,6 +11,14 @@
           "apple_private_key": "Apple privater Schlüssel (Inhalt der .p8-Datei)",
           "google_bucket": "Google-Play-Berichts-Bucket (gs://pubsite_prod_…)",
           "google_service_account": "Google-Dienstkonto (Inhalt der JSON-Schlüsseldatei)"
+        },
+        "data_description": {
+          "apple_issuer_id": "App Store Connect → Benutzer und Zugriff → Integrationen → App Store Connect API → Team-Schlüssel. Steht über der Schlüsselliste (lange ID mit Bindestrichen).",
+          "apple_key_id": "Die 10-stellige Key ID in der Zeile des erstellten Schlüssels (Rolle: Sales).",
+          "apple_vendor_number": "App Store Connect → Zahlungen und Finanzberichte: die Nummer oben links unter dem Kontonamen (8 Ziffern, meist beginnend mit 8). Auch unter Umsätze und Trends → Berichte sichtbar.",
+          "apple_private_key": "Kompletter Inhalt der heruntergeladenen Datei AuthKey_XXXXXXXXXX.p8, inklusive der BEGIN/END-Zeilen. Apple erlaubt den Download nur einmal. Auf dem Mac kopiert pbcopy < AuthKey_XXXXXXXXXX.p8 den Inhalt exakt.",
+          "google_bucket": "Play Console → Berichte herunterladen → Statistiken → „Cloud Storage-URI kopieren“. Sieht aus wie gs://pubsite_prod_…; alles nach dem Bucket-Namen wird ignoriert.",
+          "google_service_account": "Kompletter Inhalt der JSON-Schlüsseldatei des Dienstkontos (Google Cloud → IAM und Verwaltung → Dienstkonten → Schlüssel → Schlüssel hinzufügen → JSON). Die E-Mail des Dienstkontos in der Play Console → Nutzer und Berechtigungen einladen, nur mit „App-Informationen ansehen und Bulk-Berichte herunterladen“."
         }
       },
       "reconfigure": {
@@ -23,6 +31,14 @@
           "apple_private_key": "Apple privater Schlüssel (Inhalt der .p8-Datei)",
           "google_bucket": "Google-Play-Berichts-Bucket (gs://pubsite_prod_…)",
           "google_service_account": "Google-Dienstkonto (Inhalt der JSON-Schlüsseldatei)"
+        },
+        "data_description": {
+          "apple_issuer_id": "App Store Connect → Benutzer und Zugriff → Integrationen → App Store Connect API → Team-Schlüssel. Steht über der Schlüsselliste (lange ID mit Bindestrichen).",
+          "apple_key_id": "Die 10-stellige Key ID in der Zeile des erstellten Schlüssels (Rolle: Sales).",
+          "apple_vendor_number": "App Store Connect → Zahlungen und Finanzberichte: die Nummer oben links unter dem Kontonamen (8 Ziffern, meist beginnend mit 8). Auch unter Umsätze und Trends → Berichte sichtbar.",
+          "apple_private_key": "Kompletter Inhalt der heruntergeladenen Datei AuthKey_XXXXXXXXXX.p8, inklusive der BEGIN/END-Zeilen. Apple erlaubt den Download nur einmal. Auf dem Mac kopiert pbcopy < AuthKey_XXXXXXXXXX.p8 den Inhalt exakt.",
+          "google_bucket": "Play Console → Berichte herunterladen → Statistiken → „Cloud Storage-URI kopieren“. Sieht aus wie gs://pubsite_prod_…; alles nach dem Bucket-Namen wird ignoriert.",
+          "google_service_account": "Kompletter Inhalt der JSON-Schlüsseldatei des Dienstkontos (Google Cloud → IAM und Verwaltung → Dienstkonten → Schlüssel → Schlüssel hinzufügen → JSON). Die E-Mail des Dienstkontos in der Play Console → Nutzer und Berechtigungen einladen, nur mit „App-Informationen ansehen und Bulk-Berichte herunterladen“."
         }
       }
     },

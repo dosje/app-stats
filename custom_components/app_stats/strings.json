@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "App-Statistiken",
-        "description": "Read-only keys. Fill in Apple, Google or both. The Apple key needs only the role \"Sales\", the Google service account only \"View app information and download bulk reports\".",
+        "description": "Enter the read-only keys for Apple, Google or both (the other store can be added later via Reconfigure).\n\n- **Apple:** an App Store Connect API key with only the role **Sales**.\n- **Google:** a service account with only **View app information and download bulk reports**.\n\nStep-by-step guide: [https://github.com/dosje/app-stats#setup](https://github.com/dosje/app-stats#setup)",
         "data": {
           "apple_issuer_id": "Apple Issuer ID",
           "apple_key_id": "Apple Key ID",
@@ -11,6 +11,14 @@
           "apple_private_key": "Apple private key (content of the .p8 file)",
           "google_bucket": "Google Play reports bucket (gs://pubsite_prod_…)",
           "google_service_account": "Google service account (content of the JSON key file)"
+        },
+        "data_description": {
+          "apple_issuer_id": "App Store Connect → Users and Access → Integrations → App Store Connect API → Team Keys. Shown above the list of keys (a long ID with dashes).",
+          "apple_key_id": "The 10-character Key ID in the row of the key you created (role: Sales).",
+          "apple_vendor_number": "App Store Connect → Payments and Financial Reports: the number at the top left, under the account name (8 digits, usually starting with 8). Also shown in Sales and Trends → Reports.",
+          "apple_private_key": "Full content of the downloaded AuthKey_XXXXXXXXXX.p8 file, including the BEGIN/END lines. Apple lets you download it only once. On a Mac: pbcopy < AuthKey_XXXXXXXXXX.p8 copies it exactly.",
+          "google_bucket": "Play Console → Download reports → Statistics → \"Copy Cloud Storage URI\". Looks like gs://pubsite_prod_…; anything after the bucket name is ignored.",
+          "google_service_account": "Full content of the service account's JSON key file (Google Cloud → IAM & Admin → Service accounts → Keys → Add key → JSON). Invite the account's email in Play Console → Users and permissions with only \"View app information and download bulk reports\"."
         }
       },
       "reconfigure": {
@@ -23,6 +31,14 @@
           "apple_private_key": "Apple private key (content of the .p8 file)",
           "google_bucket": "Google Play reports bucket (gs://pubsite_prod_…)",
           "google_service_account": "Google service account (content of the JSON key file)"
+        },
+        "data_description": {
+          "apple_issuer_id": "App Store Connect → Users and Access → Integrations → App Store Connect API → Team Keys. Shown above the list of keys (a long ID with dashes).",
+          "apple_key_id": "The 10-character Key ID in the row of the key you created (role: Sales).",
+          "apple_vendor_number": "App Store Connect → Payments and Financial Reports: the number at the top left, under the account name (8 digits, usually starting with 8). Also shown in Sales and Trends → Reports.",
+          "apple_private_key": "Full content of the downloaded AuthKey_XXXXXXXXXX.p8 file, including the BEGIN/END lines. Apple lets you download it only once. On a Mac: pbcopy < AuthKey_XXXXXXXXXX.p8 copies it exactly.",
+          "google_bucket": "Play Console → Download reports → Statistics → \"Copy Cloud Storage URI\". Looks like gs://pubsite_prod_…; anything after the bucket name is ignored.",
+          "google_service_account": "Full content of the service account's JSON key file (Google Cloud → IAM & Admin → Service accounts → Keys → Add key → JSON). Invite the account's email in Play Console → Users and permissions with only \"View app information and download bulk reports\"."
         }
       }
     },
