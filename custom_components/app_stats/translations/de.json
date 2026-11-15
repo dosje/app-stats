@@ -1,0 +1,65 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "App-Statistiken",
+        "description": "Nur-Lese-Schlüssel. Apple, Google oder beides ausfüllen. Der Apple-Schlüssel braucht nur die Rolle „Sales“, das Google-Dienstkonto nur „App-Informationen ansehen und Bulk-Berichte herunterladen“.",
+        "data": {
+          "apple_issuer_id": "Apple Issuer ID",
+          "apple_key_id": "Apple Key ID",
+          "apple_vendor_number": "Apple Anbieternummer (Vendor Number)",
+          "apple_private_key": "Apple privater Schlüssel (Inhalt der .p8-Datei)",
+          "google_bucket": "Google-Play-Berichts-Bucket (gs://pubsite_prod_…)",
+          "google_service_account": "Google-Dienstkonto (Inhalt der JSON-Schlüsseldatei)"
+        }
+      },
+      "reconfigure": {
+        "title": "Schlüssel ändern",
+        "description": "Schlüsselfelder leer lassen, um die gespeicherten Schlüssel zu behalten.",
+        "data": {
+          "apple_issuer_id": "Apple Issuer ID",
+          "apple_key_id": "Apple Key ID",
+          "apple_vendor_number": "Apple Anbieternummer (Vendor Number)",
+          "apple_private_key": "Apple privater Schlüssel (Inhalt der .p8-Datei)",
+          "google_bucket": "Google-Play-Berichts-Bucket (gs://pubsite_prod_…)",
+          "google_service_account": "Google-Dienstkonto (Inhalt der JSON-Schlüsseldatei)"
+        }
+      }
+    },
+    "error": {
+      "nothing_entered": "Bitte die Schlüssel für mindestens einen Store eingeben.",
+      "apple_incomplete": "Apple: alle vier Felder werden benötigt.",
+      "google_incomplete": "Google: Bucket und Dienstkonto werden beide benötigt.",
+      "apple_auth": "Apple hat den Schlüssel abgelehnt (Issuer ID, Key ID, .p8-Inhalt und Rolle „Sales“ prüfen).",
+      "google_auth": "Google hat das Dienstkonto abgelehnt oder es hat keinen Zugriff auf den Bucket.",
+      "cannot_connect": "Store nicht erreichbar."
+    },
+    "abort": {
+      "already_configured": "Bereits eingerichtet.",
+      "reconfigure_successful": "Schlüssel aktualisiert.",
+      "reauth_successful": "Schlüssel aktualisiert."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Apps",
+        "description": "Jede Google-Play-App mit derselben App im App Store verknüpfen, um gemeinsame Summen zu erhalten. Gefunden: {apple_count} App Store, {google_count} Google Play.",
+        "data": {
+          "include_redownloads": "App-Store-Neuinstallationen (Re-Downloads) als Installationen zählen"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "installs_total": { "name": "Installationen gesamt" },
+      "updates_total": { "name": "Updates gesamt" },
+      "redownloads_total": { "name": "Re-Downloads gesamt" },
+      "installs_last_day": { "name": "Installationen letzter Tag" },
+      "updates_last_day": { "name": "Updates letzter Tag" },
+      "active_installs": { "name": "Aktive Installationen" },
+      "status": { "name": "Status" }
+    }
+  }
+}

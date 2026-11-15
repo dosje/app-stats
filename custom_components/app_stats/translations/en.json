@@ -1,0 +1,65 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "App-Statistiken",
+        "description": "Read-only keys. Fill in Apple, Google or both. The Apple key needs only the role \"Sales\", the Google service account only \"View app information and download bulk reports\".",
+        "data": {
+          "apple_issuer_id": "Apple Issuer ID",
+          "apple_key_id": "Apple Key ID",
+          "apple_vendor_number": "Apple vendor number",
+          "apple_private_key": "Apple private key (content of the .p8 file)",
+          "google_bucket": "Google Play reports bucket (gs://pubsite_prod_…)",
+          "google_service_account": "Google service account (content of the JSON key file)"
+        }
+      },
+      "reconfigure": {
+        "title": "Change keys",
+        "description": "Leave the key fields empty to keep the stored keys.",
+        "data": {
+          "apple_issuer_id": "Apple Issuer ID",
+          "apple_key_id": "Apple Key ID",
+          "apple_vendor_number": "Apple vendor number",
+          "apple_private_key": "Apple private key (content of the .p8 file)",
+          "google_bucket": "Google Play reports bucket (gs://pubsite_prod_…)",
+          "google_service_account": "Google service account (content of the JSON key file)"
+        }
+      }
+    },
+    "error": {
+      "nothing_entered": "Enter the keys for at least one store.",
+      "apple_incomplete": "Apple: all four fields are needed.",
+      "google_incomplete": "Google: bucket and service account are both needed.",
+      "apple_auth": "Apple rejected the key (check Issuer ID, Key ID, .p8 content and the Sales role).",
+      "google_auth": "Google rejected the service account or it has no access to the bucket.",
+      "cannot_connect": "Could not reach the store."
+    },
+    "abort": {
+      "already_configured": "Already set up.",
+      "reconfigure_successful": "Keys updated.",
+      "reauth_successful": "Keys updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Apps",
+        "description": "Link each Google Play app to the same app in the App Store to get combined totals. Apps found: {apple_count} App Store, {google_count} Google Play.",
+        "data": {
+          "include_redownloads": "Count App Store re-downloads as installs"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "installs_total": { "name": "Installs total" },
+      "updates_total": { "name": "Updates total" },
+      "redownloads_total": { "name": "Re-downloads total" },
+      "installs_last_day": { "name": "Installs last day" },
+      "updates_last_day": { "name": "Updates last day" },
+      "active_installs": { "name": "Active installs" },
+      "status": { "name": "Status" }
+    }
+  }
+}
