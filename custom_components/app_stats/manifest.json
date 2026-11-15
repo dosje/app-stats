@@ -1,7 +1,9 @@
 {
   "domain": "app_stats",
   "name": "App-Statistiken (App Store & Google Play)",
-  "codeowners": ["@dosje"],
+  "codeowners": [
+    "@dosje"
+  ],
   "config_flow": true,
   "documentation": "https://github.com/dosje/app-stats",
   "issue_tracker": "https://github.com/dosje/app-stats/issues",
@@ -9,5 +11,5 @@
   "iot_class": "cloud_polling",
   "requirements": [],
   "single_config_entry": true,
-  "version": "1.0.0"
+  "version": "1.0.1"
 }

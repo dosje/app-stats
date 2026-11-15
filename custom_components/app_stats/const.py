@@ -1,7 +1,5 @@
 """Constants for the App-Statistiken integration."""
 
-from datetime import timedelta
-
 DOMAIN = "app_stats"
 
 CONF_APPLE_ISSUER_ID = "apple_issuer_id"
@@ -13,8 +11,9 @@ CONF_GOOGLE_SERVICE_ACCOUNT = "google_service_account"
 
 OPT_INCLUDE_REDOWNLOADS = "include_redownloads"
 OPT_LINKS = "links"  # {google package name: apple app id}
+OPT_SCAN_HOURS = "scan_interval_hours"
+DEFAULT_SCAN_HOURS = 6
 
-UPDATE_INTERVAL = timedelta(hours=6)
 
 # Apple: daily reports exist for the last 365 days; older history comes from monthly reports.
 APPLE_MONTHS_BACK = 60

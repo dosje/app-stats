@@ -1,5 +1,7 @@
 # App-Statistiken (App Store & Google Play)
 
+<img src="custom_components/app_stats/brand/icon.png" width="96" alt="App-Statistiken icon">
+
 Home Assistant integration that shows the **total installs and updates** of your own apps from
 App Store Connect and Google Play, per app, per store, combined across both stores, and over all apps.
 
@@ -27,8 +29,8 @@ New apps appear automatically. Store data arrives with a delay of about one day 
   are counted separately and can be added to installs in the options. In-app purchases are ignored.
 - **Google:** "Total User Installs" from the newest monthly installs overview report; updates are the sum of
   "Update events" (or "Daily Device Upgrades" in older reports) over all months.
-- Fetched reports are cached in Home Assistant storage; after the first run only the latest days are fetched,
-  every 6 hours.
+- Fetched reports are cached in Home Assistant storage; after the first run only the latest days are fetched.
+- The stores are checked every 6 hours by default; change it under **Configure → Update interval** (1–24 hours).
 
 ## Installation (HACS)
 

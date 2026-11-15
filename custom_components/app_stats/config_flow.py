@@ -12,6 +12,9 @@ from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import (
     BooleanSelector,
+    NumberSelector,
+    NumberSelectorConfig,
+    NumberSelectorMode,
     SelectOptionDict,
     SelectSelector,
     SelectSelectorConfig,
@@ -30,14 +33,15 @@ from .const import (
     CONF_GOOGLE_BUCKET,
     CONF_GOOGLE_SERVICE_ACCOUNT,
     DOMAIN,
+    DEFAULT_SCAN_HOURS,
     OPT_INCLUDE_REDOWNLOADS,
     OPT_LINKS,
+    OPT_SCAN_HOURS,
 )
 
 APPLE_KEYS = (CONF_APPLE_ISSUER_ID, CONF_APPLE_KEY_ID, CONF_APPLE_VENDOR, CONF_APPLE_PRIVATE_KEY)
 GOOGLE_KEYS = (CONF_GOOGLE_BUCKET, CONF_GOOGLE_SERVICE_ACCOUNT)
 MULTILINE = TextSelector(TextSelectorConfig(multiline=True))
-SECRET = TextSelector(TextSelectorConfig(type="password"))
 
 
 def _schema(defaults: dict[str, Any]) -> vol.Schema:
@@ -135,12 +139,21 @@ class AppStatsOptionsFlow(OptionsFlow):
 
         if user_input is not None:
             new_links = {pkg: user_input[f"link::{pkg}"] for pkg in google_apps if user_input.get(f"link::{pkg}", "none") != "none"}
-            return self.async_create_entry(data={OPT_INCLUDE_REDOWNLOADS: user_input[OPT_INCLUDE_REDOWNLOADS], OPT_LINKS: new_links})
+            return self.async_create_entry(
+                data={
+                    OPT_SCAN_HOURS: int(user_input[OPT_SCAN_HOURS]),
+                    OPT_INCLUDE_REDOWNLOADS: user_input[OPT_INCLUDE_REDOWNLOADS],
+                    OPT_LINKS: new_links,
+                }
+            )
 
         choices = [SelectOptionDict(value="none", label="– nicht verknüpft –")] + [
             SelectOptionDict(value=app_id, label=f"{a['title']} (App Store)") for app_id, a in apple_apps.items()
         ]
         schema: dict[Any, Any] = {
+            vol.Required(OPT_SCAN_HOURS, default=int(self.config_entry.options.get(OPT_SCAN_HOURS, DEFAULT_SCAN_HOURS))): NumberSelector(
+                NumberSelectorConfig(min=1, max=24, step=1, unit_of_measurement="h", mode=NumberSelectorMode.SLIDER)
+            ),
             vol.Required(OPT_INCLUDE_REDOWNLOADS, default=self.config_entry.options.get(OPT_INCLUDE_REDOWNLOADS, False)): BooleanSelector()
         }
         for pkg in google_apps:

@@ -46,20 +46,38 @@
         "title": "Apps",
         "description": "Jede Google-Play-App mit derselben App im App Store verknüpfen, um gemeinsame Summen zu erhalten. Gefunden: {apple_count} App Store, {google_count} Google Play.",
         "data": {
+          "scan_interval_hours": "Abfrage-Intervall (Stunden)",
           "include_redownloads": "App-Store-Neuinstallationen (Re-Downloads) als Installationen zählen"
+        },
+        "data_description": {
+          "scan_interval_hours": "Wie oft die Stores abgefragt werden (Standard 6 Std.). Beide Stores veröffentlichen neue Zahlen einmal täglich."
         }
       }
     }
   },
   "entity": {
     "sensor": {
-      "installs_total": { "name": "Installationen gesamt" },
-      "updates_total": { "name": "Updates gesamt" },
-      "redownloads_total": { "name": "Re-Downloads gesamt" },
-      "installs_last_day": { "name": "Installationen letzter Tag" },
-      "updates_last_day": { "name": "Updates letzter Tag" },
-      "active_installs": { "name": "Aktive Installationen" },
-      "status": { "name": "Status" }
+      "installs_total": {
+        "name": "Installationen gesamt"
+      },
+      "updates_total": {
+        "name": "Updates gesamt"
+      },
+      "redownloads_total": {
+        "name": "Re-Downloads gesamt"
+      },
+      "installs_last_day": {
+        "name": "Installationen letzter Tag"
+      },
+      "updates_last_day": {
+        "name": "Updates letzter Tag"
+      },
+      "active_installs": {
+        "name": "Aktive Installationen"
+      },
+      "status": {
+        "name": "Status"
+      }
     }
   }
 }

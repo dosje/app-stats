@@ -18,7 +18,7 @@ from homeassistant.util import dt as dt_util
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 
-from custom_components.app_stats.const import DOMAIN, OPT_INCLUDE_REDOWNLOADS, OPT_LINKS
+from custom_components.app_stats.const import DOMAIN, OPT_INCLUDE_REDOWNLOADS, OPT_LINKS, OPT_SCAN_HOURS
 from custom_components.app_stats.coordinator import apple_plan
 from custom_components.app_stats.parsers import parse_apple_sales_report, parse_google_overview
 
@@ -182,6 +182,8 @@ def val(hass, entity_id):
 
 async def test_totals(hass: HomeAssistant, aioclient_mock):
     entry, fake = await setup_entry(hass, aioclient_mock)
+    from datetime import timedelta as _td
+    assert entry.runtime_data.update_interval == _td(hours=6)  # default
     ids = sorted(hass.states.async_entity_ids("sensor"))
     print("\n".join(ids))
     # Apple: daily 7 + 3 + monthly 100 = 110 installs, updates 30 + 400 = 430, redownloads 2
@@ -213,14 +215,17 @@ async def test_options_link_and_redownloads(hass: HomeAssistant, aioclient_mock)
     assert result["type"] is FlowResultType.FORM
     keys = [str(k) for k in result["data_schema"].schema]
     assert f"link::{PKG}" in keys, keys
-    result = await hass.config_entries.options.async_configure(result["flow_id"], {OPT_INCLUDE_REDOWNLOADS: True, f"link::{PKG}": APP_ID})
+    result = await hass.config_entries.options.async_configure(result["flow_id"], {OPT_SCAN_HOURS: 12, OPT_INCLUDE_REDOWNLOADS: True, f"link::{PKG}": APP_ID})
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert entry.options[OPT_LINKS] == {PKG: APP_ID}
+    assert entry.options[OPT_SCAN_HOURS] == 12
     await hass.async_block_till_done(wait_background_tasks=True)
     # combined device: apple 110 + 2 redownloads = 112, google 114 -> 226; updates 430 + 28
     assert val(hass, "sensor.my_app_beide_stores_installationen_gesamt") == "226"
     assert val(hass, "sensor.my_app_beide_stores_updates_gesamt") == "458"
     assert val(hass, "sensor.my_app_app_store_installationen_gesamt") == "112"
+    from datetime import timedelta as _td
+    assert entry.runtime_data.update_interval == _td(hours=12)
 
 
 async def test_jwt_is_valid_for_apple():

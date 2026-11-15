@@ -46,20 +46,38 @@
         "title": "Apps",
         "description": "Link each Google Play app to the same app in the App Store to get combined totals. Apps found: {apple_count} App Store, {google_count} Google Play.",
         "data": {
+          "scan_interval_hours": "Update interval (hours)",
           "include_redownloads": "Count App Store re-downloads as installs"
+        },
+        "data_description": {
+          "scan_interval_hours": "How often the stores are checked (default 6 h). Both stores publish new numbers once a day."
         }
       }
     }
   },
   "entity": {
     "sensor": {
-      "installs_total": { "name": "Installs total" },
-      "updates_total": { "name": "Updates total" },
-      "redownloads_total": { "name": "Re-downloads total" },
-      "installs_last_day": { "name": "Installs last day" },
-      "updates_last_day": { "name": "Updates last day" },
-      "active_installs": { "name": "Active installs" },
-      "status": { "name": "Status" }
+      "installs_total": {
+        "name": "Installs total"
+      },
+      "updates_total": {
+        "name": "Updates total"
+      },
+      "redownloads_total": {
+        "name": "Re-downloads total"
+      },
+      "installs_last_day": {
+        "name": "Installs last day"
+      },
+      "updates_last_day": {
+        "name": "Updates last day"
+      },
+      "active_installs": {
+        "name": "Active installs"
+      },
+      "status": {
+        "name": "Status"
+      }
     }
   }
 }

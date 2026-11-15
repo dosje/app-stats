@@ -28,8 +28,9 @@ from .const import (
     CONF_GOOGLE_SERVICE_ACCOUNT,
     DOMAIN,
     OPT_INCLUDE_REDOWNLOADS,
+    DEFAULT_SCAN_HOURS,
+    OPT_SCAN_HOURS,
     STORAGE_VERSION,
-    UPDATE_INTERVAL,
 )
 from .parsers import GOOGLE_OVERVIEW_RE, parse_apple_sales_report, parse_google_overview
 
@@ -61,7 +62,8 @@ class AppStatsCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Keeps all store numbers."""
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
-        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=UPDATE_INTERVAL, config_entry=entry)
+        hours = int(entry.options.get(OPT_SCAN_HOURS, DEFAULT_SCAN_HOURS))
+        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=timedelta(hours=hours), config_entry=entry)
         session = async_get_clientsession(hass)
         d = entry.data
         self.apple: AppleClient | None = None
