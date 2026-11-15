@@ -19,7 +19,7 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.test_util.aiohttp import AiohttpClientMockResponse
 
 from custom_components.app_stats.const import DOMAIN, OPT_INCLUDE_REDOWNLOADS, OPT_LINKS, OPT_SCAN_HOURS
-from custom_components.app_stats.coordinator import apple_plan
+from custom_components.app_stats.coordinator import apple_plan, month_covered_by_daily
 from custom_components.app_stats.parsers import parse_apple_sales_report, parse_google_overview
 
 APPLE_URL = "https://api.appstoreconnect.apple.com/v1/salesReports"
@@ -100,6 +100,8 @@ class FakeStores:
             return AiohttpClientMockResponse(method, url, status=200, response=apple_report([apple_row("1F", 3), apple_row("3F", 2)]))
         if q["filter[frequency]"] == "MONTHLY" and when == self.month_old:
             return AiohttpClientMockResponse(method, url, status=200, response=apple_report([apple_row("1F", 100), apple_row("7F", 400)]))
+        if q["filter[frequency]"] == "MONTHLY" and when < self.month_old:
+            return AiohttpClientMockResponse(method, url, status=410, response=b'{"errors":[{"status":"410","code":"GONE_ERROR"}]}')
         return AiohttpClientMockResponse(method, url, status=404, response='{"errors":[{"code":"NOT_FOUND"}]}'.encode())
 
 
@@ -237,3 +239,36 @@ async def test_jwt_is_valid_for_apple():
     assert header["alg"] == "ES256" and header["kid"] == "KEY1"
     claims = jwt.decode(token, EC_KEY.public_key(), algorithms=["ES256"], audience="appstoreconnect-v1")
     assert claims["iss"] == "iss-1" and claims["exp"] - claims["iat"] <= 1200
+
+
+def test_month_covered_by_daily():
+    ac = {f"D:2025-02-{d:02d}": {"empty": True} for d in range(1, 29)}
+    assert month_covered_by_daily(ac, date(2025, 2, 1))
+    del ac["D:2025-02-14"]
+    assert not month_covered_by_daily(ac, date(2025, 2, 1))
+
+
+async def test_gone_months_are_not_retried(hass: HomeAssistant, aioclient_mock, caplog):
+    entry, fake = await setup_entry(hass, aioclient_mock)
+    assert "reports failed" not in caplog.text  # 410 'gone' is not an error
+    first = fake.apple_calls
+    await entry.runtime_data.async_refresh()
+    await hass.async_block_till_done()
+    assert fake.apple_calls - first <= 6  # gone months are cached, not asked again
+
+
+async def test_daily_data_kept_when_window_moves(hass: HomeAssistant, aioclient_mock):
+    """Daily numbers older than Apple's 365-day window stay in the cache and are counted."""
+    entry, fake = await setup_entry(hass, aioclient_mock)
+    coord = entry.runtime_data
+    _, months = apple_plan(dt_util.now().date())
+    old = months[0]  # month just before the daily window
+    d = old
+    while d.month == old.month:  # pretend we fetched this month day by day a year ago
+        coord._cache["apple"][f"D:{d.isoformat()}"] = {"empty": True}
+        d += timedelta(days=1)
+    coord._cache["apple"][f"D:{old.isoformat()}"] = {"apps": {APP_ID: {"title": "My App", "installs": 50, "updates": 5, "redownloads": 0}}}
+    await coord.async_refresh()
+    await hass.async_block_till_done()
+    assert val(hass, "sensor.my_app_app_store_installationen_gesamt") == "160"  # 110 + 50 kept from daily data
+    assert f"M:{old.strftime('%Y-%m')}" not in coord._cache["apple"]

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#6D28D9"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#22C55E"/>
+      <stop offset="1" stop-color="#4ADE80"/>
+    </linearGradient>
+  </defs>
+  <!-- rounded square -->
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="url(#bg)"/>
+  <!-- phone -->
+  <rect x="120" y="76" width="196" height="340" rx="38" fill="none" stroke="#FFFFFF" stroke-width="22"/>
+  <rect x="186" y="104" width="64" height="12" rx="6" fill="#FFFFFF"/>
+  <!-- download arrow -->
+  <path d="M218 168 V286" stroke="#FFFFFF" stroke-width="26" stroke-linecap="round"/>
+  <path d="M168 244 L218 294 L268 244" fill="none" stroke="#FFFFFF" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M166 338 H270" stroke="#FFFFFF" stroke-width="22" stroke-linecap="round"/>
+  <!-- stats badge -->
+  <circle cx="356" cy="356" r="104" fill="#FFFFFF"/>
+  <rect x="302" y="364" width="28" height="44" rx="7" fill="url(#bar)"/>
+  <rect x="342" y="332" width="28" height="76" rx="7" fill="url(#bar)"/>
+  <rect x="382" y="296" width="28" height="112" rx="7" fill="url(#bar)"/>
+</svg>

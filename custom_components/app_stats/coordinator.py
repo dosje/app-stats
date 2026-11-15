@@ -58,6 +58,16 @@ def apple_plan(today: date) -> tuple[list[date], list[date]]:
     return days, months
 
 
+def month_covered_by_daily(ac: dict[str, Any], month: date) -> bool:
+    """True when every day of the month has a cached daily report (with or without sales)."""
+    d = month
+    while d.month == month.month:
+        if f"D:{d.isoformat()}" not in ac:
+            return False
+        d += timedelta(days=1)
+    return True
+
+
 class AppStatsCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Keeps all store numbers."""
 
@@ -94,7 +104,10 @@ class AppStatsCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             entry = ac.get(key)
             if entry is None or (entry.get("empty") and (today - d).days <= APPLE_RECHECK_DAYS):
                 todo.append((key, "DAILY", d.isoformat()))
-        for m in months:
+        # older months: daily data already cached is kept forever; a monthly report is only needed for
+        # months without complete daily data (Apple drops daily reports after 365 days)
+        monthly = [m for m in months if not month_covered_by_daily(ac, m)]
+        for m in monthly:
             key = f"M:{m.strftime('%Y-%m')}"
             if key not in ac:
                 todo.append((key, "MONTHLY", m.strftime("%Y-%m")))
@@ -116,13 +129,19 @@ class AppStatsCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             if errors:
                 _LOGGER.warning("Apple: %d reports failed, first: %s", len(errors), errors[0])
 
-        valid = {f"D:{d.isoformat()}" for d in days} | {f"M:{m.strftime('%Y-%m')}" for m in months}
-        for key in [k for k in ac if k not in valid]:
-            del ac[key]  # outside the plan (e.g. daily data now covered by a monthly report)
+        monthly_keys = {f"M:{m.strftime('%Y-%m')}" for m in monthly}
+        oldest_month = months[-1].strftime("%Y-%m") if months else "0000-00"
+        for key in [k for k in ac if k.startswith("M:") and k not in monthly_keys]:
+            del ac[key]  # month now fully covered by daily data (or older than the plan)
+        for key in [k for k in ac if k.startswith("D:") and k[2:9] < oldest_month]:
+            del ac[key]  # older than the plan
+        monthly_months = {m.strftime("%Y-%m") for m in monthly}
 
         apps: dict[str, dict] = {}
         last_day: str | None = None
         for key, entry in ac.items():
+            if key.startswith("D:") and key[2:9] in monthly_months:
+                continue  # incomplete daily data for a month that is counted from its monthly report
             for app_id, v in (entry.get("apps") or {}).items():
                 a = apps.setdefault(app_id, {"title": v["title"], "installs": 0, "updates": 0, "redownloads": 0})
                 a["title"] = v["title"] or a["title"]

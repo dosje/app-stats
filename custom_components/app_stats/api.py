@@ -71,10 +71,10 @@ class AppleClient:
                 return await resp.read()
             body = await resp.text()
             if resp.status in (401, 403):
-                raise StoreAuthError(f"Apple {resp.status}: {body[:200]}")
-            if resp.status == 404 or (resp.status == 400 and "INVALID" in body):
-                return None  # no sales for that period, or period outside what Apple keeps
-            raise StoreError(f"Apple {resp.status}: {body[:200]}")
+                raise StoreAuthError(f"Apple {resp.status}: {body[:500]}")
+            if resp.status in (404, 410) or (resp.status == 400 and "INVALID" in body):
+                return None  # no sales for that period, or a period Apple no longer keeps
+            raise StoreError(f"Apple {resp.status}: {body[:500]}")
 
 
 class GoogleClient:
